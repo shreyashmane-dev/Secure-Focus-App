@@ -1,0 +1,23 @@
+Focus Shield project root
+
+Main files:
+- app/build.gradle.kts
+- app/src/main/AndroidManifest.xml
+- app/src/main/java/com/example/focusshield/MainActivity.kt
+- app/src/main/java/com/example/focusshield/FocusShieldViewModel.kt
+- app/src/main/java/com/example/focusshield/data/ProtectionRepository.kt
+- app/src/main/java/com/example/focusshield/service/ProtectionMonitoringService.kt
+- app/src/main/java/com/example/focusshield/service/AppNotificationHelper.kt
+- app/src/main/java/com/example/focusshield/ui/FocusShieldApp.kt
+- app/src/main/java/com/example/focusshield/ui/screens/SetupCenterScreen.kt
+- app/src/main/java/com/example/focusshield/ui/screens/HomeScreen.kt
+- app/src/main/java/com/example/focusshield/ui/screens/DashboardScreen.kt
+- app/src/main/java/com/example/focusshield/ui/screens/SettingsScreen.kt
+- app/src/main/res/values/styles.xml
+- app/src/main/res/xml/accessibility_service_config.xml
+
+Packaged copy:
+- FocusShield-project.zip
+
+Build note:
+- app/build/outputs/apk/... will appear only after a successful Gradle build.

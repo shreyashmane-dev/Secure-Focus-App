@@ -1,0 +1,70 @@
+# Focus Shield
+
+Focus Shield is a lightweight Android MVP built with Kotlin and Jetpack Compose. It creates a temporary focus protection session for online exams by using normal Android APIs to discourage distractions and record suspicious activity.
+
+It is not spyware, malware, a hacking tool, or a fully cheat-proof lockdown system. It does not require root, does not permanently disable system features, and all monitoring is tied to Protection Mode.
+
+## Features
+
+- Start and stop temporary Protection Mode
+- Live timer, violation counter, current protected app, foreground app, and session logs
+- Immersive fullscreen mode with status/navigation bars hidden while active
+- Portrait orientation lock while active
+- Split-screen and multi-window warning detection
+- Overlay permission risk checks before and during sessions
+- App switching detection through an Accessibility Service
+- Screenshot blocking inside Focus Shield with `FLAG_SECURE`
+- Foreground monitoring service with persistent notification
+- Modern dark Material 3 Compose UI
+- MVVM-style state flow with a repository-backed session model
+
+## Project Structure
+
+```text
+app/src/main/java/com/example/focusshield
+├── MainActivity.kt
+├── FocusShieldViewModel.kt
+├── data/
+│   ├── ProtectionRepository.kt
+│   ├── ProtectionUiState.kt
+│   └── SessionLog.kt
+├── monitoring/
+│   └── ImmersiveModeController.kt
+├── service/
+│   ├── FocusShieldAccessibilityService.kt
+│   └── ProtectionMonitoringService.kt
+└── ui/
+    ├── FocusShieldApp.kt
+    ├── screens/
+    └── theme/
+```
+
+## Setup
+
+1. Open the project in Android Studio.
+2. Let Gradle sync dependencies. If Android Studio asks for a Gradle version, use the version compatible with Android Gradle Plugin `8.7.3`.
+3. Run the `app` configuration on a device or emulator running Android 8.0+.
+4. On the Settings screen, enable:
+   - Focus Shield accessibility service
+   - Notification permission on Android 13+
+5. Enter the exam app package name on the Home screen, for example `com.android.chrome`.
+6. Start Protection Mode.
+
+## Run Notes
+
+- This repository does not include a Gradle wrapper yet, so opening it in Android Studio is the intended way to run it.
+- In this shell environment there is no `gradle` or `adb`, so local install/launch could not be automated here.
+- For a first demo session, set the protected package to an installed browser such as `com.android.chrome`.
+
+## Android Security Notes
+
+Android apps cannot fully lock a student into another app, disable system navigation permanently, read private content from other apps, or guarantee that every overlay is visible. Focus Shield stays inside those limits:
+
+- Fullscreen is restored while the app has focus.
+- App switching is detected only when the user enables the accessibility service.
+- Overlay checks look for apps with enabled draw-over-other-apps capability.
+- The MVP declares `QUERY_ALL_PACKAGES` so local/demo builds can inspect installed packages for overlay permission risk. A Play Store release should replace this with a narrower package-visibility strategy.
+- Monitoring stops when Protection Mode stops.
+- The foreground service exists only to keep the temporary session visible and active.
+
+This makes the app suitable as a college-level MVP for focus protection and behavior logging, not as a high-stakes proctoring product.

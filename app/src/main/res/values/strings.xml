@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Focus Shield</string>
+    <string name="accessibility_service_label">Focus Shield Monitoring</string>
+    <string name="accessibility_service_description">Monitors foreground app changes only while Protection Mode is active.</string>
+    <string name="notification_channel_setup">Focus Shield Setup</string>
+    <string name="notification_channel_protection">Focus Shield Protection</string>
+</resources>
