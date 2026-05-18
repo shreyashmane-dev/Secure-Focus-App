@@ -108,10 +108,13 @@ object ProtectionRepository {
             return false
         }
         if (current.overlayRiskApps.isNotEmpty()) {
-            addWarning("Overlay-capable apps are enabled: ${current.overlayRiskApps.joinToString(limit = 3)}", "Overlay")
+            addInfo(
+                "Overlay-capable apps are enabled: ${current.overlayRiskApps.joinToString(limit = 3)}",
+                "Overlay"
+            )
         }
         if (!current.isAccessibilityEnabled) {
-            addWarning("Accessibility is off, so app switching cannot be monitored yet.", "Permissions")
+            addInfo("Accessibility is off, so app switching cannot be monitored yet.", "Permissions")
         }
         return true
     }
