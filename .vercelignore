@@ -1,0 +1,9 @@
+app/
+firestore.rules
+firebase.json
+build.gradle.kts
+gradle.properties
+settings.gradle.kts
+.gitignore
+.git
+admin/firebase-config.js

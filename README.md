@@ -61,6 +61,31 @@ app/src/main/java/com/example/focusshield
 9. Enter the exam app package name on the Home screen, for example `com.android.chrome`.
 10. Start Protection Mode.
 
+## Vercel Deployment
+
+1. In your Vercel project, set the root directory to the repository root and use the build command:
+
+   ```bash
+   npm run build
+   ```
+
+2. Set the output directory to:
+
+   ```text
+   admin
+   ```
+
+3. Add the Firebase environment variables in Vercel:
+   - `FIREBASE_API_KEY`
+   - `FIREBASE_AUTH_DOMAIN`
+   - `FIREBASE_PROJECT_ID`
+   - `FIREBASE_STORAGE_BUCKET`
+   - `FIREBASE_MESSAGING_SENDER_ID`
+   - `FIREBASE_APP_ID`
+   - `FIREBASE_MEASUREMENT_ID`
+
+4. Deploy the site. Vercel will run the build script and generate `admin/firebase-config.js` before serving the `admin` folder.
+
 ## Firebase Backend
 
 - Android students register and log in with Firebase Email/Password authentication.
