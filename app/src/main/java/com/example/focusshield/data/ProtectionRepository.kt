@@ -143,6 +143,11 @@ object ProtectionRepository {
                 )
             )
         }
+        val current = state.value
+        FirebaseBackendRepository.startSession(
+            testName = current.protectedAppLabel.ifBlank { current.protectedAppPackage },
+            startedAt = startedAt
+        )
         refreshPermissionState(context)
         timerJob?.cancel()
         timerJob = scope.launch {
@@ -165,6 +170,7 @@ object ProtectionRepository {
             ?.putString(KEY_LAST_DURATION, duration)
             ?.putLong(KEY_LAST_ENDED_AT, endedAt)
             ?.apply()
+        FirebaseBackendRepository.completeSession()
         _state.update {
             it.copy(
                 isActive = false,
@@ -258,6 +264,32 @@ object ProtectionRepository {
                     SessionLog(type = LogType.Violation, message = message, source = source)
                 )
             )
+        }
+        val violationType = violationTypeFor(source, message)
+        FirebaseBackendRepository.logViolation(
+            violationType = violationType,
+            severity = severityFor(violationType),
+            details = message
+        )
+    }
+
+    private fun violationTypeFor(source: String, message: String): String {
+        return when {
+            source.equals("Accessibility", ignoreCase = true) -> "APP_SWITCH"
+            source.equals("Overlay", ignoreCase = true) -> "OVERLAY_DETECTED"
+            source.equals("Window", ignoreCase = true) -> "SPLIT_SCREEN"
+            message.contains("screen off", ignoreCase = true) -> "SCREEN_OFF"
+            message.contains("left app", ignoreCase = true) -> "LEFT_APP"
+            else -> "UNKNOWN"
+        }
+    }
+
+    private fun severityFor(violationType: String): String {
+        return when (violationType) {
+            "OVERLAY_DETECTED" -> "high"
+            "SCREEN_OFF", "SPLIT_SCREEN" -> "medium"
+            "APP_SWITCH", "LEFT_APP" -> "medium"
+            else -> "low"
         }
     }
 

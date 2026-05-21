@@ -43,12 +43,25 @@ app/src/main/java/com/example/focusshield
 
 1. Open the project in Android Studio.
 2. Let Gradle sync dependencies. If Android Studio asks for a Gradle version, use the version compatible with Android Gradle Plugin `8.7.3`.
-3. Run the `app` configuration on a device or emulator running Android 8.0+.
-4. On the Settings screen, enable:
+3. Add your Firebase Android config at `app/google-services.json`.
+4. Enable Firebase Authentication with Email/Password and create a Cloud Firestore database.
+5. Deploy `firestore.rules` to the same Firebase project.
+6. Run the `app` configuration on a device or emulator running Android 8.0+.
+7. On the Settings screen, enable:
    - Focus Shield accessibility service
    - Notification permission on Android 13+
-5. Enter the exam app package name on the Home screen, for example `com.android.chrome`.
-6. Start Protection Mode.
+8. Enter the exam app package name on the Home screen, for example `com.android.chrome`.
+9. Start Protection Mode.
+
+## Firebase Backend
+
+- Android students register and log in with Firebase Email/Password authentication.
+- Student profiles are stored in `users/{uid}` with `uid`, `name`, `email`, `role`, and `createdAt`.
+- Protection start creates `sessions/{sessionId}` with active status and counters.
+- Existing violation events are mirrored into `logs/{logId}` and increment the session risk score.
+- Protection stop marks the Firestore session as `completed`.
+
+For the admin panel, create `admin/firebase-config.js` using `admin/firebase-config.example.js` as the shape, then serve or deploy the `admin` directory with Firebase Hosting. Admin access requires the signed-in user's `users/{uid}.role` to be `admin`.
 
 ## Run Notes
 

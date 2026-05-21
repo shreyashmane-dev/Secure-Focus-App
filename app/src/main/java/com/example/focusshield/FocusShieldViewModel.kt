@@ -3,15 +3,35 @@ package com.example.focusshield
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.example.focusshield.data.AuthUiState
+import com.example.focusshield.data.FirebaseBackendRepository
 import com.example.focusshield.data.ProtectionRepository
 import com.example.focusshield.service.ProtectionMonitoringService
 import kotlinx.coroutines.flow.StateFlow
 
 class FocusShieldViewModel : ViewModel() {
     val state: StateFlow<com.example.focusshield.data.ProtectionUiState> = ProtectionRepository.state
+    val authState: StateFlow<AuthUiState> = FirebaseBackendRepository.authState
 
     fun initialize(context: Context) {
+        FirebaseBackendRepository.initialize(context.applicationContext)
         ProtectionRepository.initialize(context.applicationContext)
+    }
+
+    fun register(name: String, email: String, password: String) {
+        FirebaseBackendRepository.register(name, email, password)
+    }
+
+    fun login(email: String, password: String) {
+        FirebaseBackendRepository.login(email, password)
+    }
+
+    fun logout() {
+        FirebaseBackendRepository.logout()
+    }
+
+    fun clearAuthError() {
+        FirebaseBackendRepository.clearError()
     }
 
     fun setProtectedPackage(packageName: String) {

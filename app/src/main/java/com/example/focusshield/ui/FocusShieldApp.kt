@@ -7,12 +7,15 @@ import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import com.example.focusshield.data.AuthUiState
 import com.example.focusshield.data.ProtectionUiState
+import com.example.focusshield.ui.screens.AuthScreen
 import com.example.focusshield.ui.screens.DashboardScreen
 import com.example.focusshield.ui.screens.HomeScreen
 import com.example.focusshield.ui.screens.SettingsScreen
@@ -35,7 +41,12 @@ private enum class FocusTab {
 
 @Composable
 fun FocusShieldApp(
+    authState: AuthUiState,
     state: ProtectionUiState,
+    onLogin: (String, String) -> Unit,
+    onRegister: (String, String, String) -> Unit,
+    onLogout: () -> Unit,
+    onClearAuthError: () -> Unit,
     onProtectedPackageChange: (String) -> Unit,
     onStartProtection: () -> Boolean,
     onStopProtection: () -> Unit,
@@ -57,7 +68,18 @@ fun FocusShieldApp(
         }
     }
 
-    if (needsSetup && !setupDismissed) {
+    if (authState.isLoading && !authState.isAuthenticated) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    } else if (!authState.isAuthenticated) {
+        AuthScreen(
+            authState = authState,
+            onLogin = onLogin,
+            onRegister = onRegister,
+            onClearError = onClearAuthError
+        )
+    } else if (needsSetup && !setupDismissed) {
         SetupCenterScreen(
             state = state,
             onOpenAccessibilitySettings = onOpenAccessibilitySettings,
@@ -112,6 +134,8 @@ fun FocusShieldApp(
                     FocusTab.Dashboard -> DashboardScreen(state = state)
                     FocusTab.Settings -> SettingsScreen(
                         state = state,
+                        authState = authState,
+                        onLogout = onLogout,
                         onOpenAccessibilitySettings = onOpenAccessibilitySettings,
                         onOpenOverlaySettings = onOpenOverlaySettings,
                         onOpenNotificationSettings = onOpenNotificationSettings,

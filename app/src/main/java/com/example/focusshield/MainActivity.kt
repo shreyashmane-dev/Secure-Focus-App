@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FocusShieldTheme {
                 val state by viewModel.state.collectAsState()
+                val authState by viewModel.authState.collectAsState()
                 var hasPromptedNotifications by rememberSaveable { mutableStateOf(false) }
 
                 LaunchedEffect(state.hasNotificationPermission) {
@@ -78,7 +79,12 @@ class MainActivity : ComponentActivity() {
                 }
 
                 FocusShieldApp(
+                    authState = authState,
                     state = state,
+                    onLogin = viewModel::login,
+                    onRegister = viewModel::register,
+                    onLogout = viewModel::logout,
+                    onClearAuthError = viewModel::clearAuthError,
                     onProtectedPackageChange = viewModel::setProtectedPackage,
                     onStartProtection = { viewModel.startProtection(this) },
                     onStopProtection = { viewModel.stopProtection(this) },

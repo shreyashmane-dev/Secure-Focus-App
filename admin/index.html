@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Focus Shield Premium Admin Panel</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <!-- Toast Alert Container for Real-time Violation Notifications -->
+    <section id="toastAlerts" class="alerts" aria-live="polite"></section>
+
+    <!-- Admin Login Screen -->
+    <main id="loginView" class="login-view">
+      <section class="login-shell" aria-label="Admin login">
+        <div class="brand-lockup">
+          <div class="brand-mark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h1>Focus Shield</h1>
+            <p>Secure Admin Console</p>
+          </div>
+        </div>
+
+        <form id="loginForm" class="login-form">
+          <label>
+            Email Address
+            <input id="email" type="email" placeholder="admin@focusshield.com" autocomplete="email" required>
+          </label>
+          <label>
+            Password
+            <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+          </label>
+          <button id="loginButton" type="submit">
+            <span>Login Console</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          </button>
+          <div style="text-align: center; margin-top: 20px; font-size: 13px;">
+            <span class="muted">Don't have an admin account?</span>
+            <a href="#" id="toggleAuthMode" style="color: var(--primary-blue); text-decoration: none; margin-left: 4px; font-weight: bold;">Create Account</a>
+          </div>
+          <p id="loginError" class="error" role="alert"></p>
+        </form>
+      </section>
+    </main>
+
+    <!-- Authenticated Dashboard Area -->
+    <main id="dashboardView" class="dashboard-view hidden">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="brand-lockup compact">
+          <div class="brand-mark">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h1>Focus Shield</h1>
+            <p>Enterprise Console</p>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Dashboard sections">
+          <button id="btnNavMonitoring" class="nav-item active" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Live Monitor</span>
+          </button>
+          <button id="btnNavUsers" class="nav-item" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>User Database</span>
+          </button>
+        </nav>
+
+        <div class="account-box">
+          <div class="admin-profile">
+            <div class="avatar">A</div>
+            <div class="profile-info">
+              <span id="adminName">Admin User</span>
+              <small id="adminIdentity">admin@focusshield.com</small>
+            </div>
+          </div>
+          <button id="logoutButton" class="secondary" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Workspace Panel -->
+      <div class="main-content">
+        <!-- 1. Live Monitoring Tab -->
+        <section class="workspace active-workspace" id="monitoringSection">
+          <header class="topbar">
+            <div>
+              <p class="eyebrow">Active Exam Operations</p>
+              <h2>Live System Monitor</h2>
+            </div>
+            <div class="header-actions">
+              <span id="connectionStatus" class="connection-status">Connecting</span>
+            </div>
+          </header>
+
+          <!-- Top-level Stats Row -->
+          <section class="stats-grid" aria-label="Monitoring summary">
+            <article class="stat-card">
+              <div class="stat-header">
+                <span>Active Exams</span>
+                <div class="stat-icon pulse-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+              </div>
+              <strong id="activeCount">0</strong>
+            </article>
+            <article class="stat-card">
+              <div class="stat-header">
+                <span>Completed Exams</span>
+                <div class="stat-icon text-success">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+              </div>
+              <strong id="completedCount">0</strong>
+            </article>
+            <article class="stat-card">
+              <div class="stat-header">
+                <span>Total Violations</span>
+                <div class="stat-icon text-warning">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+              </div>
+              <strong id="violationCount">0</strong>
+            </article>
+            <article class="stat-card risk">
+              <div class="stat-header">
+                <span>Peak Risk Level</span>
+                <div class="stat-icon text-danger">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>
+                </div>
+              </div>
+              <strong id="highestRisk">0</strong>
+            </article>
+          </section>
+
+          <!-- Search & Filter Controls -->
+          <section class="toolbar" aria-label="Search and filter sessions">
+            <label class="search-field">
+              <span>Search Sessions</span>
+              <input id="searchInput" type="search" placeholder="Search student name or test...">
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="statusFilter">
+                <option value="all">All Sessions</option>
+                <option value="active">Active Sessions</option>
+                <option value="completed">Completed Sessions</option>
+              </select>
+            </label>
+            <label>
+              <span>Risk Severity</span>
+              <select id="riskFilter">
+                <option value="all">All Risk Levels</option>
+                <option value="high">High Risk (60+)</option>
+                <option value="medium">Medium Risk (25-59)</option>
+                <option value="low">Low Risk (<25)</option>
+              </select>
+            </label>
+            <label>
+              <span>Sort Order</span>
+              <select id="sortMode">
+                <option value="lastActivity">Latest Activity</option>
+                <option value="violations">Total Violations</option>
+                <option value="risk">Risk Score</option>
+                <option value="startedAt">Start Time</option>
+              </select>
+            </label>
+            <button id="exportCsvButton" type="button" class="export-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              <span>Export CSV</span>
+            </button>
+          </section>
+
+          <!-- Dual-Pane Live Workspace -->
+          <section class="main-grid">
+            <!-- Left Side: Live Sessions List -->
+            <section class="panel list-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Students in Exam</h3>
+                  <p id="sessionCaption" class="muted">Connecting to database...</p>
+                </div>
+                <span id="sessionCount" class="count-pill">0</span>
+              </div>
+              <div id="sessionsList" class="session-list scrolling-list" aria-live="polite"></div>
+            </section>
+
+            <!-- Right Side: Details View -->
+            <section class="panel details-panel" id="sessionDetails">
+              <div class="empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="muted-icon"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <h3>Select a student session</h3>
+                <p>Real-time violation logs and status history will display here upon selection.</p>
+              </div>
+            </section>
+          </section>
+
+          <!-- Secondary Grid: Activity Logs & Watchlist -->
+          <section class="ops-grid">
+            <!-- Feed Panel -->
+            <section class="panel feed-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Global Alerts Feed</h3>
+                  <p class="muted">Live global violations stream</p>
+                </div>
+              </div>
+              <div id="recentAlertsList" class="compact-list"></div>
+            </section>
+
+            <!-- Watchlist Panel -->
+            <section class="panel watch-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Risk Watchlist</h3>
+                  <p class="muted">High risk students needing attention</p>
+                </div>
+              </div>
+              <div id="watchList" class="compact-list"></div>
+            </section>
+          </section>
+        </section>
+
+        <!-- 2. User Database Tab (NEW FEATURE) -->
+        <section class="workspace" id="usersSection">
+          <header class="topbar">
+            <div>
+              <p class="eyebrow">System User Directory</p>
+              <h2>User Database</h2>
+            </div>
+          </header>
+
+          <section class="toolbar" aria-label="Search and filter users">
+            <label class="search-field">
+              <span>Search Users</span>
+              <input id="userSearchInput" type="search" placeholder="Search users by name or email...">
+            </label>
+            <label>
+              <span>System Role</span>
+              <select id="userRoleFilter">
+                <option value="all">All Roles</option>
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+            <div class="toolbar-spacer"></div>
+          </section>
+
+          <section class="main-grid">
+            <!-- Left Side: Users list -->
+            <section class="panel list-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>All Registered Accounts</h3>
+                  <p id="userCountCaption" class="muted">Loading accounts...</p>
+                </div>
+                <span id="userCount" class="count-pill">0</span>
+              </div>
+              <div id="usersList" class="user-list scrolling-list" aria-live="polite"></div>
+            </section>
+
+            <!-- Right Side: User history & details pane -->
+            <section class="panel details-panel" id="userDetails">
+              <div class="empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="muted-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <h3>Select a User Profile</h3>
+                <p>Select a user to review their registration credentials, active device status, and complete test history logs.</p>
+              </div>
+            </section>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <!-- Floating Live Monitor Widget (Top-Right / Corner) -->
+    <div id="cornerTracker" class="corner-tracker hidden">
+      <div class="tracker-header">
+        <span class="live-dot pulse"></span>
+        <div class="tracker-title-box">
+          <h4>Live Session Monitor</h4>
+          <span id="cornerSessionCount" class="badge">0 active</span>
+        </div>
+        <button id="minimizeTracker" class="min-btn" aria-label="Minimize monitor">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/></svg>
+        </button>
+      </div>
+      <div id="trackerContent" class="tracker-content">
+        <div class="tracker-empty">
+          <p>No active exams in progress.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

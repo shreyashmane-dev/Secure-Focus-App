@@ -20,11 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.focusshield.data.AuthUiState
 import com.example.focusshield.data.ProtectionUiState
 
 @Composable
 fun SettingsScreen(
     state: ProtectionUiState,
+    authState: AuthUiState,
+    onLogout: () -> Unit,
     onOpenAccessibilitySettings: () -> Unit,
     onOpenOverlaySettings: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
@@ -42,6 +45,15 @@ fun SettingsScreen(
             title = "Settings",
             subtitle = "Prepare the permissions used during active protection sessions."
         )
+
+        FocusCard(modifier = Modifier.fillMaxWidth()) {
+            Text("Account", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            MetricRow("Signed in", authState.email.ifBlank { authState.name })
+            MetricRow("Role", authState.role)
+            OutlinedButton(onClick = onLogout, enabled = !state.isActive, modifier = Modifier.fillMaxWidth()) {
+                Text("Logout")
+            }
+        }
 
         FocusCard(modifier = Modifier.fillMaxWidth()) {
             Text("Accessibility", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
