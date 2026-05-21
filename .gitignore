@@ -8,3 +8,4 @@ app/build/
 *.zip
 app/google-services.json
 admin/firebase-config.js
+.env

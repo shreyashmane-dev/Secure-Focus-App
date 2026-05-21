@@ -45,13 +45,21 @@ app/src/main/java/com/example/focusshield
 2. Let Gradle sync dependencies. If Android Studio asks for a Gradle version, use the version compatible with Android Gradle Plugin `8.7.3`.
 3. Add your Firebase Android config at `app/google-services.json`.
 4. Enable Firebase Authentication with Email/Password and create a Cloud Firestore database.
-5. Deploy `firestore.rules` to the same Firebase project.
-6. Run the `app` configuration on a device or emulator running Android 8.0+.
-7. On the Settings screen, enable:
+5. Create a local `.env` file at the repository root with your Firebase Web app config, then generate `admin/firebase-config.js`:
+
+   ```bash
+   cp .env.example .env
+   # fill .env with your Firebase values
+   node scripts/generate-firebase-config.js
+   ```
+
+6. Deploy `firestore.rules` to the same Firebase project.
+7. Run the `app` configuration on a device or emulator running Android 8.0+.
+8. On the Settings screen, enable:
    - Focus Shield accessibility service
    - Notification permission on Android 13+
-8. Enter the exam app package name on the Home screen, for example `com.android.chrome`.
-9. Start Protection Mode.
+9. Enter the exam app package name on the Home screen, for example `com.android.chrome`.
+10. Start Protection Mode.
 
 ## Firebase Backend
 
@@ -61,7 +69,7 @@ app/src/main/java/com/example/focusshield
 - Existing violation events are mirrored into `logs/{logId}` and increment the session risk score.
 - Protection stop marks the Firestore session as `completed`.
 
-For the admin panel, create `admin/firebase-config.js` using `admin/firebase-config.example.js` as the shape, then serve or deploy the `admin` directory with Firebase Hosting. Admin access requires the signed-in user's `users/{uid}.role` to be `admin`.
+For the admin panel, create `admin/firebase-config.js` from the root `.env` file by running `node scripts/generate-firebase-config.js`. Then serve or deploy the `admin` directory with Firebase Hosting. Admin access requires the signed-in user's `users/{uid}.role` to be `admin`.
 
 ## Run Notes
 

@@ -14,13 +14,19 @@ Use one Firebase project for both the Android app and admin dashboard.
    ```
 
 5. Add a Web app in the same Firebase project.
-6. Copy the Web app config into:
+6. Copy the Web app config into a local `.env` file at the repository root.
 
    ```text
-   admin/firebase-config.js
+   .env
    ```
 
-   Use `admin/firebase-config.example.js` as the template.
+   Then run:
+
+   ```bash
+   node scripts/generate-firebase-config.js
+   ```
+
+   This generates `admin/firebase-config.js` from the `.env` values.
 
 7. Deploy Firestore rules:
 
